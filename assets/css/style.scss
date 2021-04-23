@@ -1,0 +1,61 @@
+---
+---
+@import "{{ site.theme }}"; $primary: rgb(84, 40, 201);
+$secondary: rgb(141, 122, 237);
+$accent: rgb(11, 150, 99);
+$contrast: desaturate(rgb(255, 212, 0), 40%);
+
+.logo {
+  float: left;
+  width: 3em;
+  padding: 1em;
+}
+
+header h1, strong {
+  color: $primary;
+}
+
+header h2 {
+  color: $secondary;
+}
+
+h2 {
+  color: $secondary;
+}
+
+li::marker {
+  color: $contrast;
+  content: '\2619';
+  font-size: 1.4em;
+}
+
+li::first-line {
+  line-height: 1;
+}
+
+a {
+  color: $accent;
+}
+
+footer {
+  color: $contrast;
+  text-align: center;
+}
+
+.author-blurb {
+  text-align: right;
+}
+
+.post-date {
+  float: right;
+  color: $secondary;
+}
+
+.subscribe-link {
+  color: $contrast;
+}
+
+.subscribe-link a {
+  color: $contrast;
+  font-weight: bold;
+}
