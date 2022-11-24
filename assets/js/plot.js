@@ -73,7 +73,7 @@ class ElectionMap {
           if (!(precinctId in districts)) {
             consolidationMap[precinctId] = precinctId;
             districts[precinctId] = {
-              'precincts': [precinctId],
+              'precincts': [],
               'registeredVoters': parseFloat(r.Reg_voters),
               'totalBallots': parseFloat(r.total_ballots || r.Ballots),
               'votes': {},
@@ -105,6 +105,12 @@ class ElectionMap {
           }
           // // this is too noisy for city/school board contests
           // if (!precinctsSet) console.warn('No precincts match ', c);
+        }
+        for (const [p, d] of Object.entries(districts)) {
+          if (!d.precincts.length) {
+            console.warn(`Precinct ${p} was not consolidated.`);
+            d.precincts.push(p);
+          }
         }
   
         // add the data to the map
@@ -144,8 +150,10 @@ class ElectionMap {
     let candidateColors = null;
 
     d3.select('.curplot').remove();
+    d3.select('.curtip').remove();
     const graph = d3.select(this.mapId).append('g').attr('class', 'curplot');
     const tooltip = d3.select(this.mapId).append('foreignObject')
+      .attr('class', 'curtip')
       .attr('width', '300px')
       .attr('height', '600px')
       .attr('pointer-events', 'none');
@@ -235,8 +243,8 @@ class ElectionMap {
           .exit().remove();
   
         const zoom = d3.zoom()
-          .scaleExtent([1, 10])
-          .translateExtent([[0, 0], [bounds.width, bounds.height]])
+          .scaleExtent([0.6, 10])
+          .translateExtent([[-50, -50], [bounds.width + 50, bounds.height + 50]])
           .on('zoom', ({transform}) => graph.transition().attr('transform', transform));
         graph.call(zoom);
       }
