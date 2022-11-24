@@ -273,4 +273,4 @@ class ElectionMap {
 }
 
 const map = new ElectionMap('#map', '#contestPicker');
-map.loadPath('/assets/election_results/44_results_11_10.csv');
+map.loadPath('/assets/election_results/44_ElectionResults_11-23.csv');
