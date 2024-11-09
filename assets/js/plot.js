@@ -257,7 +257,7 @@ class ElectionMap {
     while (selectElem.firstChild) selectElem.removeChild(selectElem.firstChild);
     // now replace the data
     this.contests().then((contestMap) => {
-      const allContests = Object.entries(contestMap);
+      const allContests = Object.entries(contestMap).sort();
       for (const [contest, votes] of allContests) {
         const elem = document.createElement('option');
         elem.textContent = contest;
@@ -271,6 +271,3 @@ class ElectionMap {
     });
   }
 }
-
-const map = new ElectionMap('#map', '#contestPicker');
-map.loadPath('/assets/election_results/44_ElectionResults_11-23.csv');
