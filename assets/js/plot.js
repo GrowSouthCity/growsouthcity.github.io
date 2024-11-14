@@ -154,10 +154,11 @@ class ElectionMap {
     const graph = d3.select(this.mapId).append('g').attr('class', 'curplot');
     const tooltip = d3.select(this.mapId).append('foreignObject')
       .attr('class', 'curtip')
-      .attr('width', '300px')
+      .attr('width', '200px')
       .attr('height', '600px')
       .attr('pointer-events', 'none');
   
+    // display tooltip
     function onClick(evt, d) {
       if (evt.defaultPrevented) return;
       graph
@@ -171,15 +172,17 @@ class ElectionMap {
         return;
       }
       selected = d;
-      const [x, y] = d3.pointer(evt);
+      const mapCoords = d3.select('#map').node().getBoundingClientRect();
+      const x = evt.clientX - mapCoords.x;
+      const y = evt.clientY - mapCoords.y;
       if (d.properties && d.properties.votes) {
         const precinctList = d.properties.precincts.map(
           (p) => p === d.properties.precinct ? `<strong>${p}</strong>` : p
         ).join(' ');
         const votes = totalResults.map(([v, _]) => `<span style="color:${candidateColors[v](1)}">${v}</span> ${d.properties.votes[v]}`).join('<br />');
         tooltip
-          .attr('x', `${x + 10}px`)
-          .attr('y', `${y}px`)
+          .attr('x', `${x}`)
+          .attr('y', `${y}`)
           .append('xhtml:div')
           .style('background-color', 'white')
           .style('border-radius', '4px')
@@ -243,9 +246,12 @@ class ElectionMap {
           .exit().remove();
   
         const zoom = d3.zoom()
-          .scaleExtent([0.6, 10])
-          .translateExtent([[-50, -50], [bounds.width + 50, bounds.height + 50]])
-          .on('zoom', ({transform}) => graph.transition().attr('transform', transform));
+          .scaleExtent([0.1, 10])
+          .translateExtent([[-200, -200], [bounds.width + 200, bounds.height + 200]])
+          .on('zoom', ({transform}) => {
+            tooltip.select('div').remove();
+            graph.attr('transform', transform);
+          });
         graph.call(zoom);
       }
     );
